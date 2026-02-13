@@ -5,7 +5,7 @@ Personal shell scripts, automatically sourced for both interactive and non-inter
 ## Quick Install
 
 ```bash
-git clone https://github.com/frankhli843/clawed.git ~/clawed && ~/clawed/install.sh
+git clone https://github.com/frankhli843/hashtensor-clawed.git ~/clawed && ~/clawed/install.sh
 ```
 
 This will:

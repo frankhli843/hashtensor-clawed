@@ -3,7 +3,7 @@
 set -e
 
 CLAWED_DIR="$HOME/clawed"
-REPO_URL="https://github.com/frankhli843/clawed.git"
+REPO_URL="https://github.com/frankhli843/hashtensor-clawed.git"
 SOURCE_LINE='source "$HOME/clawed/main.sh"'
 ENV_LINE='export BASH_ENV="$HOME/clawed/main.sh"'
 MARKER="clawed/main.sh"
