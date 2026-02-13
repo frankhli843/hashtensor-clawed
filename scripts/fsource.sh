@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 
-alias fsource='source "$HOME/.bashrc"'
+fsource() {
+  git -C "$HOME/clawed" pull
+  source "$HOME/.bashrc"
+}

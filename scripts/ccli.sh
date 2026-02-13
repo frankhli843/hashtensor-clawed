@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Ensure Claude Code's install location is in PATH
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
 # Install Claude Code if not already installed
 install_claude_code() {
   if command -v claude &>/dev/null; then
