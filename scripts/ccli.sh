@@ -71,4 +71,17 @@ ccli() {
   fi
 }
 
-alias claw='openclaw tui'
+# Load NVM for root if available from clauderunner
+if [ "$(id -u)" -eq 0 ] && [ -s "/home/clauderunner/.nvm/nvm.sh" ]; then
+  export NVM_DIR="/home/clauderunner/.nvm"
+  . "$NVM_DIR/nvm.sh"
+fi
+
+claw() {
+  # Restart gateway to avoid token mismatch issues
+  pkill -f "openclaw gateway" 2>/dev/null
+  sleep 1
+  openclaw gateway start 2>/dev/null &
+  sleep 2
+  openclaw tui "$@"
+}
