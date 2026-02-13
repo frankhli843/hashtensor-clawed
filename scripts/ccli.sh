@@ -18,6 +18,39 @@ install_claude_code() {
 
 install_claude_code
 
+# Install NVM and Node.js if not available
+_install_nvm_node() {
+  if command -v nvm &>/dev/null || [ -s "$HOME/.nvm/nvm.sh" ]; then
+    return 0
+  fi
+  echo "Installing NVM..."
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+  export NVM_DIR="$HOME/.nvm"
+  . "$NVM_DIR/nvm.sh"
+  echo "Installing Node.js LTS..."
+  nvm install --lts
+}
+
+# Install OpenClaw if not available
+_install_openclaw() {
+  if command -v openclaw &>/dev/null; then
+    return 0
+  fi
+  # Ensure NVM is loaded
+  if [ -s "$HOME/.nvm/nvm.sh" ]; then
+    export NVM_DIR="$HOME/.nvm"
+    . "$NVM_DIR/nvm.sh"
+  fi
+  if ! command -v npm &>/dev/null; then
+    return 0
+  fi
+  echo "Installing OpenClaw..."
+  npm install -g openclaw
+}
+
+_install_nvm_node
+_install_openclaw
+
 # Symlink clauderunner's nvm binaries into /usr/local/bin so root can access them
 _symlink_nvm_bins() {
   if [ "$(id -u)" -ne 0 ]; then
