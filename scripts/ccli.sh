@@ -71,4 +71,4 @@ ccli() {
   fi
 }
 
-alias claw='ccli'
+alias claw='openclaw tui'
