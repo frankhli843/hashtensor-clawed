@@ -37,8 +37,12 @@ ccli() {
     local _ccli_cwd
     _ccli_cwd="$(pwd)"
     setfacl -R -m "u:${_ccli_user}:rwx" "$_ccli_cwd" 2>/dev/null || chmod -R o+rwx "$_ccli_cwd"
+    # Install claude for the runner user if needed
+    if [ ! -f "/home/$_ccli_user/.local/bin/claude" ]; then
+      su - "$_ccli_user" -c "curl -fsSL https://claude.ai/install.sh | bash"
+    fi
     # Run claude as the non-root user
-    su - "$_ccli_user" -c "export PATH=\"$PATH\"; cd \"$_ccli_cwd\" && claude --dangerously-skip-permissions $*"
+    su - "$_ccli_user" -c "export PATH=\"/home/$_ccli_user/.local/bin:\$PATH\"; cd \"$_ccli_cwd\" && claude --dangerously-skip-permissions $*"
   else
     claude --dangerously-skip-permissions "$@"
   fi
