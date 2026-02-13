@@ -17,6 +17,23 @@ This will:
 
 `BASH_ENV` tells bash to source the script even in non-interactive mode (e.g. shell scripts, cron jobs, `bash -c "..."`).
 
+## Claude Code API Key Setup
+
+To use Claude Code without interactive login, set your Anthropic API key:
+
+1. Go to [console.anthropic.com](https://console.anthropic.com/)
+2. Sign up or log in
+3. Navigate to **Settings** > **API Keys**
+4. Click **Create Key**, give it a name, and copy the key (starts with `sk-ant-...`)
+5. Add it to your shell profile:
+
+```bash
+echo 'export ANTHROPIC_API_KEY="sk-ant-your-key-here"' >> ~/.bash_profile
+source ~/.bash_profile
+```
+
+Note: This uses pay-as-you-go API billing, not your Claude Pro/Max subscription. Add credits under **Settings** > **Billing** in the console.
+
 ## Adding Scripts
 
 Drop any `.sh` file into the `scripts/` directory (subdirectories work too). It will be sourced automatically by `main.sh`.
