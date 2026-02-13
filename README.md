@@ -13,6 +13,7 @@ This will:
 1. Clone the repo to `~/clawed`
 2. Add `source "$HOME/clawed/main.sh"` to `~/.bashrc` (interactive shells)
 3. Add `source` + `export BASH_ENV` to `~/.bash_profile` (login shells + non-interactive shells)
+4. Add an hourly cron job that force pulls the latest from `origin/main`
 
 `BASH_ENV` tells bash to source the script even in non-interactive mode (e.g. shell scripts, cron jobs, `bash -c "..."`).
 
@@ -21,6 +22,8 @@ This will:
 Drop any `.sh` file into the `scripts/` directory (subdirectories work too). It will be sourced automatically by `main.sh`.
 
 ## Updating
+
+Scripts auto-update every hour via cron. To update manually:
 
 ```bash
 cd ~/clawed && git pull

@@ -28,4 +28,12 @@ if ! grep -qF "$MARKER" "$HOME/.bash_profile" 2>/dev/null; then
   echo "Added source + BASH_ENV to ~/.bash_profile"
 fi
 
+# Add hourly cron job to force pull latest
+CRON_CMD="cd $CLAWED_DIR && git fetch --all && git reset --hard origin/main"
+CRON_LINE="0 * * * * $CRON_CMD"
+if ! crontab -l 2>/dev/null | grep -qF "clawed"; then
+  (crontab -l 2>/dev/null; echo "$CRON_LINE") | crontab -
+  echo "Added hourly cron job to force pull"
+fi
+
 echo "Done. Restart your shell or run: source ~/.bashrc"
