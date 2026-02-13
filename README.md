@@ -28,7 +28,7 @@ Claude Code is installed automatically when the scripts are sourced. To authenti
 3. It will display a URL — open that URL in your browser on any device
 4. Complete the login in your browser
 5. Claude Code on the server will detect the login and start working
-6. Run `openclaw setup` to configure OpenClaw
+6. Run `npx openclaw@latest init` to set up tokens and configure OpenClaw
 7. Run `claw` to launch the OpenClaw TUI
 
 ### Option B: API Key (pay-as-you-go billing)
