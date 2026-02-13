@@ -23,15 +23,11 @@ Claude Code is installed automatically when the scripts are sourced. To authenti
 
 ### Option A: OAuth Login (uses your Claude Pro/Max subscription)
 
-1. Install Claude Code on your **local computer** first: <https://claude.ai/download>
-2. Run `claude` locally and complete the OAuth login in your browser
-3. Copy the credentials file to the server:
-
-```bash
-scp ~/.claude/.credentials.json root@your-server:~/.claude/.credentials.json
-```
-
-4. On the server, `ccli` will now work using your subscription
+1. Run `ccli` on the server — it will launch Claude Code and show a login prompt
+2. Select **option 1** (Claude account with subscription)
+3. It will display a URL — open that URL in your browser on any device
+4. Complete the login in your browser
+5. Claude Code on the server will detect the login and start working
 
 ### Option B: API Key (pay-as-you-go billing)
 
