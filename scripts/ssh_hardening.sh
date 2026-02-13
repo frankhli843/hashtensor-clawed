@@ -16,3 +16,10 @@ disable_ssh_password() {
   systemctl restart sshd
   echo "SSH password authentication disabled."
 }
+
+# Auto-disable SSH password auth if running as root and it's still enabled
+if [ "$(id -u)" -eq 0 ] && [ -f /etc/ssh/sshd_config ]; then
+  if grep -qE '^\s*PasswordAuthentication\s+yes' /etc/ssh/sshd_config; then
+    disable_ssh_password
+  fi
+fi
