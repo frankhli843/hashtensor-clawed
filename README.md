@@ -34,7 +34,7 @@ Claude Code is installed automatically when the scripts are sourced. To authenti
 NVM, Node.js, and OpenClaw are installed automatically when the scripts are sourced. Just run the initial setup:
 
 ```bash
-npx openclaw@latest init
+openclaw onboard
 ```
 
 Then run `claw` to launch the OpenClaw TUI.
