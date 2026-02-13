@@ -28,8 +28,36 @@ Claude Code is installed automatically when the scripts are sourced. To authenti
 3. It will display a URL — open that URL in your browser on any device
 4. Complete the login in your browser
 5. Claude Code on the server will detect the login and start working
-6. Run `npx openclaw@latest init` to set up tokens and configure OpenClaw
-7. Run `claw` to launch the OpenClaw TUI
+
+### OpenClaw Setup
+
+1. Install NVM and Node.js:
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh"
+nvm install --lts
+```
+
+2. Install OpenClaw:
+
+```bash
+npm install -g openclaw
+```
+
+3. Run the initial setup:
+
+```bash
+npx openclaw@latest init
+```
+
+4. Source the scripts to load everything:
+
+```bash
+fsource
+```
+
+5. Run `claw` to launch the OpenClaw TUI
 
 ### Option B: API Key (pay-as-you-go billing)
 
