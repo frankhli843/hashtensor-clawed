@@ -17,9 +17,23 @@ This will:
 
 `BASH_ENV` tells bash to source the script even in non-interactive mode (e.g. shell scripts, cron jobs, `bash -c "..."`).
 
-## Claude Code API Key Setup
+## Claude Code Setup
 
-To use Claude Code without interactive login, set your Anthropic API key:
+Claude Code is installed automatically when the scripts are sourced. To authenticate, you have two options:
+
+### Option A: OAuth Login (uses your Claude Pro/Max subscription)
+
+1. Install Claude Code on your **local computer** first: <https://claude.ai/download>
+2. Run `claude` locally and complete the OAuth login in your browser
+3. Copy the credentials file to the server:
+
+```bash
+scp ~/.claude/.credentials.json root@your-server:~/.claude/.credentials.json
+```
+
+4. On the server, `ccli` will now work using your subscription
+
+### Option B: API Key (pay-as-you-go billing)
 
 1. Go to [console.anthropic.com](https://console.anthropic.com/)
 2. Sign up or log in
@@ -32,7 +46,7 @@ echo 'export ANTHROPIC_API_KEY="sk-ant-your-key-here"' >> ~/.bash_profile
 source ~/.bash_profile
 ```
 
-Note: This uses pay-as-you-go API billing, not your Claude Pro/Max subscription. Add credits under **Settings** > **Billing** in the console.
+Note: Option B uses pay-as-you-go API billing, not your Claude Pro/Max subscription. Add credits under **Settings** > **Billing** in the console.
 
 ## Adding Scripts
 
