@@ -18,6 +18,29 @@ install_claude_code() {
 
 install_claude_code
 
+# Symlink clauderunner's nvm binaries into /usr/local/bin so root can access them
+_symlink_nvm_bins() {
+  if [ "$(id -u)" -ne 0 ]; then
+    return 0
+  fi
+  local _nvm_bin_dir="/home/clauderunner/.nvm/versions/node"
+  if [ ! -d "$_nvm_bin_dir" ]; then
+    return 0
+  fi
+  local _node_bin
+  _node_bin="$(find "$_nvm_bin_dir" -maxdepth 2 -name bin -type d 2>/dev/null | sort -V | tail -1)"
+  if [ -z "$_node_bin" ]; then
+    return 0
+  fi
+  for bin in node openclaw; do
+    if [ -f "$_node_bin/$bin" ] && [ ! -e "/usr/local/bin/$bin" ]; then
+      ln -s "$_node_bin/$bin" "/usr/local/bin/$bin"
+    fi
+  done
+}
+
+_symlink_nvm_bins
+
 # Claude CLI alias - skip permissions prompt
 # When running as root, delegate to a temporary non-root user to bypass the restriction
 ccli() {
