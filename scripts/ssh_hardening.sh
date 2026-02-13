@@ -13,7 +13,12 @@ disable_ssh_password() {
   sed -i 's/^#\?ChallengeResponseAuthentication.*/ChallengeResponseAuthentication no/' "$cfg"
   sed -i 's/^#\?KbdInteractiveAuthentication.*/KbdInteractiveAuthentication no/' "$cfg"
 
-  systemctl restart sshd
+  # Ubuntu uses 'ssh', other distros use 'sshd'
+  if systemctl list-units --type=service --all | grep -q 'sshd.service'; then
+    systemctl restart sshd
+  else
+    systemctl restart ssh
+  fi
   echo "SSH password authentication disabled."
 }
 
