@@ -5,11 +5,22 @@ if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Source-time installers only run in interactive shells. install.sh exports BASH_ENV, so every
+# non-interactive bash re-sources this file, and the bash in "curl ... | bash" re-sources it again
+# before reading stdin. Where the tool is missing (snap chromium's #!/bin/bash command chain runs
+# with HOME=~/snap/... and no claude or curl) that recursed without bound and OOM-killed a host.
+# CLAWED_CCLI_INSTALLING stops the same recursion when an installer is reached from an interactive shell.
+_clawed_may_install() {
+  [[ $- == *i* ]] && [[ -z "${CLAWED_CCLI_INSTALLING:-}" ]]
+}
+
 # Install Claude Code if not already installed
 install_claude_code() {
   if command -v claude &>/dev/null; then
     return 0
   fi
+  _clawed_may_install || return 0
+  local -x CLAWED_CCLI_INSTALLING=1
 
   echo "Installing Claude Code..."
   curl -fsSL https://claude.ai/install.sh | bash
@@ -23,6 +34,8 @@ _install_nvm_node() {
   if command -v nvm &>/dev/null || [ -s "$HOME/.nvm/nvm.sh" ]; then
     return 0
   fi
+  _clawed_may_install || return 0
+  local -x CLAWED_CCLI_INSTALLING=1
   echo "Installing NVM..."
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
   export NVM_DIR="$HOME/.nvm"
@@ -33,17 +46,20 @@ _install_nvm_node() {
 
 # Install OpenClaw if not available
 _install_openclaw() {
-  if command -v openclaw &>/dev/null; then
-    return 0
-  fi
-  # Ensure NVM is loaded
+  # Ensure NVM is loaded before checking for openclaw, otherwise login shells
+  # can miss the existing ~/.nvm install and reinstall OpenClaw on every SSH.
   if [ -s "$HOME/.nvm/nvm.sh" ]; then
     export NVM_DIR="$HOME/.nvm"
     . "$NVM_DIR/nvm.sh"
   fi
+  if command -v openclaw &>/dev/null; then
+    return 0
+  fi
   if ! command -v npm &>/dev/null; then
     return 0
   fi
+  _clawed_may_install || return 0
+  local -x CLAWED_CCLI_INSTALLING=1
   echo "Installing OpenClaw..."
   npm install -g openclaw
 }
@@ -104,8 +120,9 @@ ccli() {
   fi
 }
 
-# Load NVM for root if available from clauderunner
-if [ "$(id -u)" -eq 0 ] && [ -s "/home/clauderunner/.nvm/nvm.sh" ]; then
+# Load NVM for root if available from clauderunner and root has no NVM of its own
+# (otherwise clauderunner's older node and openclaw would shadow root's on PATH)
+if [ "$(id -u)" -eq 0 ] && [ ! -s "$HOME/.nvm/nvm.sh" ] && [ -s "/home/clauderunner/.nvm/nvm.sh" ]; then
   export NVM_DIR="/home/clauderunner/.nvm"
   . "$NVM_DIR/nvm.sh"
 fi
